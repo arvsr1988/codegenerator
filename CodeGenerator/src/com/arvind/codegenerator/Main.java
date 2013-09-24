@@ -8,9 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class Main {
-	
-	
-	
+		
 	public static void main(String[] args){
 		
 		try {
@@ -35,7 +33,6 @@ public class Main {
 		} catch (Exception ex){
 			ex.printStackTrace();
 		}
-		
 	}
 
 	private static String getInputFromFile() throws Exception {
