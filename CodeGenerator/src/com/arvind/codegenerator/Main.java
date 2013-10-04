@@ -2,6 +2,7 @@ package com.arvind.codegenerator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -21,14 +22,15 @@ public class Main {
 		String[] inputStringWords = inputFromFile.toLowerCase().split(" ");
 		
 		String[] tags = POSTagger.getTags(inputStringWords);
-		List<Integer> positions = POSTagger.getTagsByPOS(tags, POSTagger.NOUN_TAG);
+		//TODO : call the new createClasses method
+/*		List<Integer> positions = POSTagger.getTagsByPOS(tags, Arrays.asList(new String[]{POSTagger.NOUN_TAGS}));
 		List<String> classNames = new ArrayList<String>();
 		
 		for(int position : positions){
 			classNames.add(inputStringWords[position]);
-		}
+		}*/
 		
-		ClassGenerator.generateClassFiles(classNames);
+		//ClassGenerator.generateClassFiles(classNames);
 		
 		} catch (Exception ex){
 			ex.printStackTrace();
