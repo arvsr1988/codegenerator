@@ -89,19 +89,15 @@ public class ClassGenerator {
 	}
 	
 	
-	private static void generateFiles(Map<Integer, Set<Integer>> classesWithAttributes, String[] inputStringArray) throws Exception{
+	private static void generateFiles(Map<Integer, Set<Integer>> classesWithAttributes, String[] inputStringArray) throws Exception {
+		File directory = new File(GENERATE_DIRECTORY);
+		directory.mkdirs();
+		if(!directory.exists()){
+			throw new Exception("Failed to make directory");
+		}
 		
 		for(Map.Entry<Integer, Set<Integer>> classAttrs : classesWithAttributes.entrySet()){
 			String className = inputStringArray[classAttrs.getKey()];
-			//TODO : move this logic out of the loop. Its just to create the directory.
-			File targetFile = new File(getFullFilePath(className));
-			File parent = targetFile.getParentFile();
-			
-			if(!parent.exists() && !parent.mkdirs()){
-			    throw new IllegalStateException("Couldn't create dir: " + parent);
-			}
-			
-			
 			List<String> linesInFile = new ArrayList<String>();
 			String formattedClassName = getFormattedClassName(className);
 			linesInFile.add(new StringBuilder().append("public class ").append(formattedClassName).append("{").toString());
