@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,13 +75,16 @@ public class POSTagger {
 		
 		
 		for(int currentIndex = 0; currentIndex < tagArrayLength ; currentIndex++){
+			if(!posList.contains(tags[currentIndex])){
+				continue;
+			}
 			Set<Integer> tagPositionList = tagPositionMap.get(tags[currentIndex]);
 			if(tagPositionList == null){
+				tagPositionList = new HashSet<Integer>(); 
 			}
 			
-			if(posList.contains(tags[currentIndex])){
-				tagPositionMap.put(tags[currentIndex], tagPositionList);
-			}
+			tagPositionList.add(currentIndex);
+			tagPositionMap.put(tags[currentIndex], tagPositionList);
 		}
 		
 		return tagPositionMap;
