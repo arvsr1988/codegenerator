@@ -1,5 +1,10 @@
 package com.arvind.codegenerator.domain;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.arvind.codegenerator.POSTagger;
 
 public class NounOwner {
@@ -25,6 +30,17 @@ public class NounOwner {
 		}
 		
 		return nounOwner;
+	}	
+	
+	public static void getOwnersWithAttributes(List<NounOwner> nounOwnerList, Map<Integer, Set<Integer>> classAttributeMap){
+		
+		for(NounOwner nounOwner : nounOwnerList){
+			
+			Set<Integer> attributeSet =  classAttributeMap.get(nounOwner.getOwnerPosition());
+			if(attributeSet == null) {attributeSet = new HashSet<Integer>();}
+			attributeSet.add(nounOwner.getAttributePosition());
+			classAttributeMap.put(nounOwner.getOwnerPosition(), attributeSet);
+		}
 	}	
 	
 	public int getOwnerPosition() {
