@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -44,20 +46,16 @@ public class ClassGenerator {
 		Map<String, Set<Integer>> pronounTags = POSTagger.getTagsByPOS(posTags, POSTagger.PRONOUN_TAGS);
 		 
 	
-		//3) for each tag, get the owner and the attribute position as a Map<Intger attributePosition, Integer ownerPosition>
-		List<NounOwner> nounOwnershipList = new ArrayList<NounOwner>();
-		
+		//3) for each tag, get the owner and the attribute position
+		List<NounOwner> nounOwnershipList = new ArrayList<NounOwner>();		
 		for(Map.Entry<String, Set<Integer>> tag : pronounTags.entrySet()){
 			for(int tagPosition : tag.getValue()){
 				nounOwnershipList.add(NounOwner.getNounOwnership(tagPosition, posTags));
-				
-				// remove attributePosition entry from classesWithAttributes and add attributePosition to classesWithAttributes.get(owernPosition)
-				
-				
 			}
 		}
-		
 		NounOwner.getOwnersWithAttributes(nounOwnershipList, classesWithAttributes);
+		
+		removeEmptyClasses(classesWithAttributes);
 		
 		//merge all the same nouns together. use Map<String, List<String>> for this. this can be passed to the class generator
 		mergeNouns(classesWithAttributes, words);
@@ -65,11 +63,20 @@ public class ClassGenerator {
 
 	}
 	
+	private static void removeEmptyClasses(Map<Integer, Set<Integer>> classesWithAttributes){
+		
+		Iterator<Entry<Integer, Set<Integer>>> classIterator = classesWithAttributes.entrySet().iterator();
+		while(classIterator.hasNext()){
+			Entry<Integer, Set<Integer>> classAttrs = classIterator.next();
+			if(classAttrs.getValue() == null || classAttrs.getValue().isEmpty()){
+				classIterator.remove();		
+			}	
+		}
+	}
+	
 	private static void mergeNouns(Map<Integer, Set<Integer>> classesWithAttributes, String[] inputStringArray){
-		
 		Map<ClassDetails, Set<Integer>> updatedClassAttributeMap = new HashMap<ClassDetails, Set<Integer>>();
-		
-		
+			
 		for(Map.Entry<Integer, Set<Integer>> classAttributes : classesWithAttributes.entrySet()){
 			ClassDetails classDetails = new ClassDetails(inputStringArray[classAttributes.getKey()], classAttributes.getKey());
 			Set<Integer> updateAttributeList = updatedClassAttributeMap.get(classDetails);
@@ -109,7 +116,7 @@ public class ClassGenerator {
 					prefix = getFormattedClassName(inputStringArray[attrPosition]);
 				}
 				
-				linesInFile.add(new StringBuilder("private ").append(prefix).append(" ").append(inputStringArray[attrPosition].toLowerCase()).toString());
+				linesInFile.add(new StringBuilder("private ").append(prefix).append(" ").append(inputStringArray[attrPosition].toLowerCase()).append(";").toString());
 			}
 			
 			linesInFile.add("}");

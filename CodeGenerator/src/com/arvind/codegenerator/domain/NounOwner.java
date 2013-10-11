@@ -20,12 +20,14 @@ public class NounOwner {
 		for(int index = pronounPosition + 1; index < tags.length; index++){
 			if(POSTagger.NOUN_TAGS.contains(tags[index])){
 				nounOwner.setAttributePosition(index);
+				break;
 			}
 		}
 		
 		for(int index = pronounPosition - 1; index > 0; index --){
 			if(POSTagger.NOUN_TAGS.contains(tags[index])){
 				nounOwner.setOwnerPosition(index);
+				break;
 			}
 		}
 		
@@ -33,9 +35,7 @@ public class NounOwner {
 	}	
 	
 	public static void getOwnersWithAttributes(List<NounOwner> nounOwnerList, Map<Integer, Set<Integer>> classAttributeMap){
-		
 		for(NounOwner nounOwner : nounOwnerList){
-			
 			Set<Integer> attributeSet =  classAttributeMap.get(nounOwner.getOwnerPosition());
 			if(attributeSet == null) {attributeSet = new HashSet<Integer>();}
 			attributeSet.add(nounOwner.getAttributePosition());
