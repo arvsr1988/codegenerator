@@ -5,7 +5,7 @@ An application to generate code based on the requirements of a system.
 
 This is a Proof of Concept that has been built.  
 
-The application works as follows : <br />
+<h2>How it works</h2>
 <ul>
   <li>A textual input with the requirements of the application is fed.</li>
   <li>The input is tokenized. The tokenization is done using the apache-opennlp library. </li>
